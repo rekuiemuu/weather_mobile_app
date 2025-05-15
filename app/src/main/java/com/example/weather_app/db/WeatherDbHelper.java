@@ -60,10 +60,8 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     public void delete(long id) {
         getWritableDatabase().delete(TABLE, COL_ID + "=?", new String[]{String.valueOf(id)});
     }
-
     /** очистить всю историю */
     public void deleteAll() {
         getWritableDatabase().delete(TABLE, null, null);
     }
 }
- 
