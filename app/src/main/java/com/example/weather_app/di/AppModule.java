@@ -21,9 +21,9 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-@Module(includes = ViewModelModule.class)
-@InstallIn(SingletonComponent.class)          // ← обязательная строка
-public final class AppModule {               // публичный и final по-желанию
+@Module
+@InstallIn(SingletonComponent.class)
+public final class AppModule {
 
     @Provides @Singleton
     static AppExecutors provideExecutors() {
@@ -60,3 +60,4 @@ public final class AppModule {               // публичный и final по
         return db.forecastDao();
     }
 }
+

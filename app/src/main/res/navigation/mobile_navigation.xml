@@ -21,5 +21,15 @@
         android:name="com.example.weather_app.ui.today.TodayFragment"
         android:label=""
         tools:layout=""/>
+    <!-- Добавьте эти два: -->
+    <fragment
+        android:id="@+id/settings"
+        android:name="com.example.weather_app.ui.settings.SettingsFragment"
+        android:label="@string/settings" />
+
+    <fragment
+        android:id="@+id/about"
+        android:name="com.example.weather_app.ui.settings.AboutFragment"
+        android:label="@string/about" />
 
 </navigation>

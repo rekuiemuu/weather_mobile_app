@@ -4,34 +4,32 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Location {
+    @SerializedName("name")      private String name;
+    @SerializedName("region")    private String region;
+    @SerializedName("country")   private String country;
 
-    @SerializedName("name")
-    @Expose
-    private String name;
 
-    @SerializedName("region")
-    @Expose
-    private String region;
+    public String getCountry() {
+        return country;
+    }
 
-    @SerializedName("country")
-    @Expose
-    private String country;
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
-    @SerializedName("lat")
-    @Expose
-    private double lat;
+    public String getRegion() {
+        return region;
+    }
 
-    @SerializedName("lon")
-    @Expose
-    private double lon;
+    public void setRegion(String region) {
+        this.region = region;
+    }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getRegion() { return region; }
-
-    public String getCountry() { return country; }
-
-    public double getLat() { return lat; }
-
-    public double getLon() { return lon; }
+    public void setName(String name) {
+        this.name = name;
+    }
 }

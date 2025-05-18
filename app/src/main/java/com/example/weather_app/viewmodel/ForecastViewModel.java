@@ -14,19 +14,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class ForecastViewModel extends ViewModel {
+    private final ForecastRepository repository;
 
-    private ForecastRepository forecastRepository;
-
-    @SuppressWarnings("unchecked")
     @Inject
-    public ForecastViewModel(ForecastRepository forecastRepository) {
-        this.forecastRepository = forecastRepository;
+    public ForecastViewModel(ForecastRepository repository) {
+        this.repository = repository;
     }
 
-    @VisibleForTesting
     public LiveData<Resource<List<SavedDailyForecast>>> fetchResults(String city, String numDays) {
-        return forecastRepository.fetchForecast(city, numDays);
+        return repository.fetchForecast(city, numDays);
     }
-
 }
+
+

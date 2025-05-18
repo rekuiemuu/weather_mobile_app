@@ -53,7 +53,12 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
         //Set values
         holder.desc.setText(description);
         holder.temp.setText(Utility.formatTemperature(mContext, forecast.getMaxTemp()) + "/" + Utility.formatTemperature(mContext, forecast.getMinTemp()));
-        holder.imageView.setImageResource(Utility.getIconResourceForWeatherCondition(weather_id));
+        int resId = Utility.getIconResourceForWeatherCondition(weather_id);
+        if (resId != -1) {
+            holder.imageView.setImageResource(resId);
+        } else {
+            holder.imageView.setImageResource(R.drawable.ic_unknown); // твой запасной ресурс
+        }
         holder.day.setText(Utility.format(forecast.getDate()));
     }
 

@@ -1,5 +1,7 @@
 package com.example.weather_app.repository;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -9,19 +11,23 @@ import com.example.weather_app.BuildConfig;
 import com.example.weather_app.api.ApiResponse;
 import com.example.weather_app.api.WeatherService;
 import com.example.weather_app.db.ForecastDao;
+import com.example.weather_app.model.Day;
+import com.example.weather_app.model.Forecast;
+import com.example.weather_app.model.Forecastday;
 import com.example.weather_app.model.Resource;
 import com.example.weather_app.model.SavedDailyForecast;
-import com.example.weather_app.model.Uvi;
-import com.example.weather_app.model.UviDb;
+// import com.example.weather_app.model.Uvi;
+// import com.example.weather_app.model.UviDb;
 import com.example.weather_app.model.WeatherForecast;
+import com.example.weather_app.util.SharedPreferences;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 @Singleton
 public class ForecastRepository {
@@ -29,54 +35,58 @@ public class ForecastRepository {
     private final ForecastDao forecastDao;
     private final WeatherService weatherService;
     private final AppExecutors appExecutors;
+    private final Context appContext;
 
     @Inject
     public ForecastRepository(AppExecutors appExecutors,
                               ForecastDao forecastDao,
-                              WeatherService weatherService) {
-        this.appExecutors = appExecutors;
-        this.forecastDao = forecastDao;
+                              WeatherService weatherService,
+                              @ApplicationContext Context appContext) {
+        this.appExecutors  = appExecutors;
+        this.forecastDao  = forecastDao;
         this.weatherService = weatherService;
+        this.appContext    = appContext;
     }
 
     public LiveData<Resource<List<SavedDailyForecast>>> fetchForecast(String city, String numDays) {
         return new NetworkBoundResource<List<SavedDailyForecast>, WeatherForecast>(appExecutors) {
-
             @Override
             protected void saveCallResult(@NonNull WeatherForecast item) {
-                forecastDao.deleteNewsTable();
+                // 1) текущие данные в SharedPreferences
+                if (item.getCurrent() != null) {
+                    SharedPreferences prefs = SharedPreferences.getInstance(appContext);
+                    prefs.getTemp(item.getCurrent().getTempC());
+                    prefs.setFeelsLike(item.getCurrent().getFeelslikeC());
+                    prefs.setHumidity(item.getCurrent().getHumidity());
+                    prefs.setUv(item.getCurrent().getUv());
+                    prefs.setWind(item.getCurrent().getWindKph());
+                    prefs.setDesc(item.getCurrent().getCondition().getText());
+                }
 
-                if (item.getForecast() != null && item.getForecast().getForecastday() != null) {
-                    List<SavedDailyForecast> saved = new ArrayList<>();
-
-                    for (com.example.weather_app.model.DailyForecast df : item.getForecast().getForecastday()) {
+                // 2) ежедневный прогноз в БД
+                Forecast forecast = item.getForecast();
+                if (forecast != null && forecast.getForecastday() != null) {
+                    List<SavedDailyForecast> savedList = new ArrayList<>();
+                    for (Forecastday df : forecast.getForecastday()) {
+                        Day d = df.getDay();
                         SavedDailyForecast s = new SavedDailyForecast();
-                        try {
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                            Date parsedDate = sdf.parse(df.getDate());
-                            if (parsedDate != null) {
-                                s.setDate(parsedDate.getTime()); // это long
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            s.setDate(0L); // fallback, если ошибка
-                        }
-
-                        s.setDayTemp(df.getDay().getAvgTemp());
-                        s.setMaxTemp(df.getDay().getMaxTemp());
-                        s.setMinTemp(df.getDay().getMinTemp());
-                        s.setHumidity((int) df.getDay().getHumidity());
-                        s.setDescription(df.getDay().getCondition().getText());
-                        s.setImageUrl(df.getDay().getCondition().getIcon());
-                        saved.add(s);
+                        s.setDate(df.getDateEpoch());
+                        s.setDayTemp(d.getAvgtempC());
+                        s.setMaxTemp(d.getMaxtempC());
+                        s.setMinTemp(d.getMintempC());
+                        s.setHumidity(d.getHumidity());
+                        s.setDescription(d.getCondition().getText());
+                        s.setImageUrl(d.getCondition().getIcon());
+                        savedList.add(s);
                     }
-
-                    forecastDao.insertForecastList(saved);
+                    forecastDao.insertForecastList(savedList);
                 }
             }
 
+
             @Override
             protected boolean shouldFetch(@Nullable List<SavedDailyForecast> data) {
+                // всегда фетчим при заходе
                 return true;
             }
 
@@ -98,53 +108,48 @@ public class ForecastRepository {
 
             @Override
             protected void onFetchFailed() {
-                // лог или обработка
+                // здесь можно логировать ошибку
             }
         }.asLiveData();
     }
 
-//    public LiveData<Resource<UviDb>> fetchUvi(Double lat, Double lon) {
-//        final Double finalLat = lat;
-//        final Double finalLon = lon;
-//
-//        return new NetworkBoundResource<UviDb, Uvi>(appExecutors) {
-//
-//            @Override
-//            protected void saveCallResult(@NonNull Uvi item) {
-//                forecastDao.deleteUvi();
-//                if (item != null) {
-//                    UviDb uviDb = new UviDb();
-//                    uviDb.setLat(item.getLat());
-//                    uviDb.setLon(item.getLon());
-//                    uviDb.setValue(item.getValue());
-//                    forecastDao.insertUvi(uviDb);
-//                }
-//            }
-//
-//            @Override
-//            protected boolean shouldFetch(@Nullable UviDb data) {
-//                return true;
-//            }
-//
-//            @NonNull
-//            @Override
-//            protected LiveData<UviDb> loadFromDb() {
-//                return forecastDao.loadUvi();
-//            }
-//
-//            @NonNull
-//            @Override
-//            protected LiveData<ApiResponse<Uvi>> createCall() {
-//                return weatherService.getUvi(finalLat, finalLon, BuildConfig.WEATHER_API_KEY);
-//            }
-//
-//            @Override
-//            protected void onFetchFailed() {
-//                // лог ошибок
-//            }
-//
-//        }.asLiveData();
-//    }
+    /*
+    // Если потребуется UV-index:
+    public LiveData<Resource<UviDb>> fetchUvi(Double lat, Double lon) {
+        return new NetworkBoundResource<UviDb, Uvi>(appExecutors) {
+            @Override
+            protected void saveCallResult(@NonNull Uvi item) {
+                forecastDao.deleteUvi();
+                if (item != null) {
+                    UviDb uviDb = new UviDb();
+                    uviDb.setLat(item.getLat());
+                    uviDb.setLon(item.getLon());
+                    uviDb.setValue(item.getValue());
+                    forecastDao.insertUvi(uviDb);
+                }
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable UviDb data) {
+                return true;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<UviDb> loadFromDb() {
+                return forecastDao.loadUvi();
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<Uvi>> createCall() {
+                return weatherService.getUvi(lat, lon, BuildConfig.WEATHER_API_KEY);
+            }
+
+            @Override
+            protected void onFetchFailed() { }
+        }.asLiveData();
+    }
+    */
 
 }
-

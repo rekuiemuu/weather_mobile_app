@@ -27,9 +27,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class TodayFragment extends Fragment {
-
+    private ForecastViewModel viewModel;
     /** Hilt-фабрика для ViewModel-ов */
-    @Inject ViewModelProvider.Factory viewModelFactory;
 
     private FragmentHomeBinding binding;          // ViewBinding
     private ForecastViewModel   forecastVm;
@@ -58,7 +57,7 @@ public class TodayFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view,
                               Bundle savedInstanceState) {
-
+        viewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
         super.onViewCreated(view, savedInstanceState);
         fetchData();
     }
@@ -73,8 +72,9 @@ public class TodayFragment extends Fragment {
         String city    = prefs.getCity();
         String numDays = prefs.getNumDays();
 
-        forecastVm = new ViewModelProvider(this, viewModelFactory)
+        forecastVm = new ViewModelProvider(this)
                 .get(ForecastViewModel.class);
+
 
         forecastVm.fetchResults(city, numDays)
                 .observe(getViewLifecycleOwner(), result -> {

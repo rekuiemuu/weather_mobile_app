@@ -22,15 +22,10 @@ import com.example.weather_app.viewmodel.ForecastViewModel;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class WeeklyFragment extends Fragment implements WeeklyAdapter.ItemClickListener {
-
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
 
     private FragmentWeeklyBinding binding;
     private ForecastViewModel weeklyViewModel;
@@ -50,7 +45,7 @@ public class WeeklyFragment extends Fragment implements WeeklyAdapter.ItemClickL
                 ContextCompat.getColor(requireContext(), R.color.weekly_background));
 
         setupRecyclerView();
-        fetchData();
+        setupViewModelAndFetch();
 
         return binding.getRoot();
     }
@@ -63,16 +58,15 @@ public class WeeklyFragment extends Fragment implements WeeklyAdapter.ItemClickL
                 new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
     }
 
-    private void fetchData() {
+    private void setupViewModelAndFetch() {
+        weeklyViewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
+
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
 
         SharedPreferences prefs = SharedPreferences.getInstance(requireContext());
         String city = prefs.getCity();
         String numDays = prefs.getNumDays();
-
-        weeklyViewModel = new ViewModelProvider(this, viewModelFactory)
-                .get(ForecastViewModel.class);
 
         weeklyViewModel.fetchResults(city, numDays).observe(getViewLifecycleOwner(), result -> {
             List<SavedDailyForecast> list = result.data;
@@ -103,7 +97,7 @@ public class WeeklyFragment extends Fragment implements WeeklyAdapter.ItemClickL
             }
 
             binding.tempCondition.setText(temp);
-            adapter.removeItem(0); // удаление первого элемента после отображения
+            adapter.removeItem(0);
         });
     }
 
