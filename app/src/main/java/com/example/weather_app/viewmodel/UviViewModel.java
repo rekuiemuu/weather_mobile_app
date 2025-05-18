@@ -21,4 +21,8 @@ public class UviViewModel extends ViewModel {
         this.forecastRepository = forecastRepository;
     }
 
+    @VisibleForTesting
+    public LiveData<Resource<UviDb>> fetchUvi(Double lat, Double lon) {
+        return forecastRepository.fetchUvi(lat, lon);
+    }
 }

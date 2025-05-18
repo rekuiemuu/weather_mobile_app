@@ -10,32 +10,79 @@ import java.io.Serializable;
 
 @Entity
 public class SavedDailyForecast implements Serializable {
-    @PrimaryKey(autoGenerate = true) private int id;
 
-    // просто поля БД, без @SerializedName
-    private long date;
-    private double minTemp;
-    private double maxTemp;
-    private double dayTemp;
-    private double nightTemp;
-    private double eveningTemp;
-    private double morningTemp;
-    private double feelslikeDay;
-    private double feelslikeNight;
-    private double feelslikeEve;
-    private double feelslikeMorning;
-    private int humidity;
-    private double wind;
-    private String description;
-    private int weatherId;
-    private String imageUrl;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+    @SerializedName("lat")
+    private double lat;
+    @SerializedName("lon")
+    private double lon;
+    @SerializedName("mdate")
+    public long mdate;
+    @SerializedName("temperatureMin")
+    public double minTemp;
+    @SerializedName("temperatureMax")
+    public double maxTemp;
+    @SerializedName("temperatureDay")
+    public double dayTemp;
+    @SerializedName("temperatureNight")
+    public double nightTemp;
+    @SerializedName("temperatureEvening")
+    public double eveningTemp;
+    @SerializedName("temperatureMorning")
+    public double morningTemp;
+    @SerializedName("feelslikeDay")
+    public double mfeelslikeDay;
+    @SerializedName("feelslikeNight")
+    public double mfeelslikeNight;
+    @SerializedName("feelslikeEvening")
+    public double mfeelslikeEve;
+    @SerializedName("feelslikeMorning")
+    public double mfeelslikeMorning;
+    @SerializedName("humidity")
+    public int mhumidity;
+    @SerializedName("wind")
+    public double mwind;
+    @SerializedName("description")
+    public String mdescription;
+    @SerializedName("weatherid")
+    public int weatherid;
+    @SerializedName("imageUrl")
+    public String imageUrl;
 
-    public long getDate() {
-        return date;
+    public SavedDailyForecast() {
     }
 
-    public void setDate(long date) {
-        this.date = date;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public long getDate() {
+        return mdate;
+    }
+
+    public void setDate(long mdate) {
+        this.mdate = mdate;
     }
 
     public double getMinTemp() {
@@ -86,68 +133,69 @@ public class SavedDailyForecast implements Serializable {
         this.morningTemp = morningTemp;
     }
 
+
     public double getFeelslikeDay() {
-        return feelslikeDay;
+        return mfeelslikeDay;
     }
 
     public void setFeelslikeDay(double feelslikeDay) {
-        this.feelslikeDay = feelslikeDay;
+        this.mfeelslikeDay = feelslikeDay;
     }
 
     public double getFeelslikeNight() {
-        return feelslikeNight;
+        return mfeelslikeNight;
     }
 
     public void setFeelslikeNight(double feelslikeNight) {
-        this.feelslikeNight = feelslikeNight;
+        this.mfeelslikeNight = feelslikeNight;
     }
 
     public double getFeelslikeEve() {
-        return feelslikeEve;
+        return mfeelslikeEve;
     }
 
     public void setFeelslikeEve(double feelslikeEve) {
-        this.feelslikeEve = feelslikeEve;
+        this.mfeelslikeEve = feelslikeEve;
     }
 
     public double getFeelslikeMorning() {
-        return feelslikeMorning;
+        return mfeelslikeMorning;
     }
 
     public void setFeelslikeMorning(double feelslikeMorning) {
-        this.feelslikeMorning = feelslikeMorning;
+        this.mfeelslikeMorning = feelslikeMorning;
     }
 
     public int getHumidity() {
-        return humidity;
+        return mhumidity;
     }
 
     public void setHumidity(int humidity) {
-        this.humidity = humidity;
+        this.mhumidity = humidity;
     }
 
     public double getWind() {
-        return wind;
+        return mwind;
     }
 
     public void setWind(double wind) {
-        this.wind = wind;
+        this.mwind = wind;
     }
 
     public String getDescription() {
-        return description;
+        return mdescription;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.mdescription = description;
     }
 
-    public int getWeatherId() {
-        return weatherId;
+    public int getWeatherid() {
+        return weatherid;
     }
 
-    public void setWeatherId(int weatherId) {
-        this.weatherId = weatherId;
+    public void setWeatherid(int weatherid) {
+        this.weatherid = weatherid;
     }
 
     public String getImageUrl() {

@@ -9,7 +9,7 @@ public class Forecastday {
 
     // Вложенный объект day
     @SerializedName("day")
-    private Day day;
+    private DailyForecast day;
 
     public long getDateEpoch() {
         return dateEpoch;
@@ -18,10 +18,10 @@ public class Forecastday {
         this.dateEpoch = dateEpoch;
     }
 
-    public Day getDay() {
+    public DailyForecast getDay() {
         return day;
     }
-    public void setDay(Day day) {
+    public void setDay(DailyForecast day) {
         this.day = day;
     }
 }

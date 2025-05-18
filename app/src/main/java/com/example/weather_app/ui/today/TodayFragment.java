@@ -4,12 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
 import com.example.weather_app.R;
 import com.example.weather_app.databinding.FragmentHomeBinding;
 import com.example.weather_app.model.SavedDailyForecast;
@@ -17,116 +15,128 @@ import com.example.weather_app.model.UviDb;
 import com.example.weather_app.util.SharedPreferences;
 import com.example.weather_app.util.Utility;
 import com.example.weather_app.viewmodel.ForecastViewModel;
-
-import java.util.Calendar;
-import java.util.List;
-
-import javax.inject.Inject;
+import com.example.weather_app.viewmodel.UviViewModel;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import java.util.Calendar;
+import java.util.List;
+import javax.inject.Inject;
 
 @AndroidEntryPoint
 public class TodayFragment extends Fragment {
-    private ForecastViewModel viewModel;
-    /** Hilt-фабрика для ViewModel-ов */
 
-    private FragmentHomeBinding binding;          // ViewBinding
-    private ForecastViewModel   forecastVm;
+    private FragmentHomeBinding binding;
 
-    public static TodayFragment create() {        // фабричный метод
-        return new TodayFragment();
-    }
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
 
-    /* ───────────────────────────────────────────── */
+    private ForecastViewModel forecastViewModel;
+    private UviViewModel uviViewModel;
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            ViewGroup container,
+            Bundle savedInstanceState
+    ) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-
-        // цвет статус-бара, как раньше
         requireActivity().getWindow()
-                .setStatusBarColor(ContextCompat.getColor(requireContext(),
-                        R.color.colorPrimaryToday));
-
+                .setStatusBarColor(
+                        ContextCompat.getColor(requireContext(), R.color.colorPrimaryToday)
+                );
+        fetchData();
         return binding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view,
-                              Bundle savedInstanceState) {
-        viewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
-        super.onViewCreated(view, savedInstanceState);
-        fetchData();
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 
-    /* ───────────────────────────────────────────── */
-
     private void fetchData() {
-        Calendar c = Calendar.getInstance();
-        int hour = c.get(Calendar.HOUR_OF_DAY);
+        Calendar calendar = Calendar.getInstance();
+        int hourOfDay = calendar.get(Calendar.HOUR_OF_DAY);
 
-        SharedPreferences prefs = SharedPreferences.getInstance(requireContext());
-        String city    = prefs.getCity();
-        String numDays = prefs.getNumDays();
+        String city    = SharedPreferences.getInstance(requireContext()).getCity();
+        String numDays = SharedPreferences.getInstance(requireContext()).getNumDays();
 
-        forecastVm = new ViewModelProvider(this)
+        binding.city.setText(Utility.toTitleCase(city));
+
+        forecastViewModel = new ViewModelProvider(this, viewModelFactory)
                 .get(ForecastViewModel.class);
 
-
-        forecastVm.fetchResults(city, numDays)
+        forecastViewModel.fetchResults(city, numDays)
                 .observe(getViewLifecycleOwner(), result -> {
-
-                    List<SavedDailyForecast> list = result.data;
-                    binding.city.setText(Utility.toTitleCase(city));
-
-                    if (list == null || list.isEmpty()) return;
-
-                    SavedDailyForecast d0 = list.get(0);
-
-
-                    binding.weatherResource.setImageResource(
-                            Utility.getArtResourceForConditionText(d0.getDescription())
-                    );
-
-                    binding.condition.setText(Utility.toTitleCase(d0.getDescription()));
-                    binding.date.setText(String.format("%s, %s",
-                            Utility.format(d0.getDate()),
-                            Utility.formatDate(d0.getDate())));
-
-                    binding.humidityValue.setText(d0.getHumidity() + "%");
-                    Float windValue = (float) d0.getWind();
-                    if (windValue != null) {
-                        binding.windValue.setText(
-                                Utility.getFormattedWind(requireContext(), windValue));
-                    } else {
-                        binding.windValue.setText(getString(R.string.no_data)); // или "-"
+                    List<SavedDailyForecast> forecasts = result.data;
+                    if (forecasts != null && !forecasts.isEmpty()) {
+                        SavedDailyForecast today = forecasts.get(0);
+                        showForecast(today, hourOfDay);
+                        fetchUvi(today.getLat(), today.getLon());
                     }
+                });
+    }
 
+    private void showForecast(SavedDailyForecast forecast, int hour) {
+        // Icon and description
+        binding.weatherResource.setImageResource(
+                Utility.getArtResourceForWeatherCondition(forecast.getWeatherid())
+        );
+        binding.condition.setText(Utility.toTitleCase(forecast.getDescription()));
+        binding.date.setText(String.format(
+                "%s, %s",
+                Utility.format(forecast.getDate()),
+                Utility.formatDate(forecast.getDate())
+        ));
+        // Humidity & wind
+        binding.humidityValue.setText(forecast.getHumidity() + "%");
+        binding.windValue.setText(
+                Utility.getFormattedWind(requireContext(), (float) forecast.getWind())
+        );
 
-                    prefs.putStringValue(SharedPreferences.DESC, d0.getDescription());
+        // Save description
+        SharedPreferences.getInstance(requireContext())
+                .putStringValue(SharedPreferences.DESC, forecast.getDescription());
 
-                    /* температура по времени суток */
-                    String showTemp; String feelTemp;
-                    if (hour < 12) {                  // утро
-                        showTemp = Utility.formatTemperature(requireContext(), d0.getMorningTemp());
-                        feelTemp = Utility.formatTemperature(requireContext(), d0.getFeelslikeMorning());
-                    } else if (hour < 16) {           // день
-                        showTemp = Utility.formatTemperature(requireContext(), d0.getDayTemp());
-                        feelTemp = Utility.formatTemperature(requireContext(), d0.getFeelslikeDay());
-                    } else if (hour < 21) {           // вечер
-                        showTemp = Utility.formatTemperature(requireContext(), d0.getEveningTemp());
-                        feelTemp = showTemp; // feels-like равно eveningTemp
-                    } else {                          // ночь
-                        showTemp = Utility.formatTemperature(requireContext(), d0.getNightTemp());
-                        feelTemp = Utility.formatTemperature(requireContext(), d0.getFeelslikeNight());
+        // Choose which temperature to show
+        double temp, feels;
+        if (hour < 12) {
+            temp  = forecast.getMorningTemp();
+            feels = forecast.getFeelslikeMorning();
+        } else if (hour < 16) {
+            temp  = forecast.getDayTemp();
+            feels = forecast.getFeelslikeDay();
+        } else if (hour < 21) {
+            temp  = forecast.getEveningTemp();
+            feels = forecast.getFeelslikeEve();
+        } else {
+            temp  = forecast.getNightTemp();
+            feels = forecast.getFeelslikeNight();
+        }
+
+        binding.tempCondition.setText(
+                Utility.formatTemperature(requireContext(), temp)
+        );
+        binding.temperature.setText(
+                Utility.formatTemperature(requireContext(), feels)
+        );
+        SharedPreferences.getInstance(requireContext())
+                .putStringValue(
+                        SharedPreferences.TEMP,
+                        Utility.formatTemperature(requireContext(), temp)
+                );
+    }
+
+    private void fetchUvi(double lat, double lon) {
+        uviViewModel = new ViewModelProvider(this, viewModelFactory)
+                .get(UviViewModel.class);
+
+        uviViewModel.fetchUvi(lat, lon)
+                .observe(getViewLifecycleOwner(), result -> {
+                    UviDb uvi = result.data;
+                    if (uvi != null) {
+                        binding.uvValue.setText(String.valueOf(uvi.getValue()));
                     }
-
-                    binding.tempCondition.setText(showTemp);
-                    binding.temperature.setText(feelTemp);
-                    prefs.putStringValue(SharedPreferences.TEMP, showTemp);
                 });
     }
 }

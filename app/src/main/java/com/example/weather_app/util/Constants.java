@@ -8,7 +8,7 @@ final public class Constants {
     //----------------------------------------------------------------------------------------------
     // API
     //----------------------------------------------------------------------------------------------
-    public static final String BASE_URL = "https://api.weatherapi.com/v1/";
+    public static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
     public static final String UNIT_SYSTEM = "metric";
 
     //----------------------------------------------------------------------------------------------

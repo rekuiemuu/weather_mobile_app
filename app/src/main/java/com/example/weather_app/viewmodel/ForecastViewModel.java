@@ -18,16 +18,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public class ForecastViewModel extends ViewModel {
-    private final ForecastRepository repository;
+
+    private ForecastRepository forecastRepository;
 
     @Inject
-    public ForecastViewModel(ForecastRepository repository) {
-        this.repository = repository;
+    public ForecastViewModel(ForecastRepository forecastRepository) {
+        this.forecastRepository = forecastRepository;
     }
 
+    @VisibleForTesting
     public LiveData<Resource<List<SavedDailyForecast>>> fetchResults(String city, String numDays) {
-        return repository.fetchForecast(city, numDays);
+        return forecastRepository.fetchForecast(city, numDays);
+    }
+
+    @VisibleForTesting
+    public LiveData<Resource<UviDb>> fetchUvi(Double lat, Double lon) {
+        return forecastRepository.fetchUvi(lat, lon);
     }
 }
-
-

@@ -3,36 +3,63 @@ package com.example.weather_app.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class WeatherForecast {
-    @SerializedName("location")
-    private Location location;
-    @SerializedName("current")
-    private Current current;
-    @SerializedName("forecast")
-    private Forecast forecast;
 
-    public Current getCurrent() {
-        return current;
+    @SerializedName("city")
+    @Expose
+    private City city;
+    @SerializedName("cod")
+    @Expose
+    private String cod;
+    @SerializedName("message")
+    @Expose
+    private Double message;
+    @SerializedName("cnt")
+    @Expose
+    private Integer cnt;
+    @SerializedName("list")
+    @Expose
+    private List<DailyForecast> dailyForecasts = null;
+
+    public City getCity() {
+        return city;
     }
 
-    public void setCurrent(Current current) {
-        this.current = current;
+    public void setCity(City city) {
+        this.city = city;
     }
 
-    public Location getLocation() {
-        return location;
+    public String getCod() {
+        return cod;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setCod(String cod) {
+        this.cod = cod;
     }
 
-    public Forecast getForecast() {
-        return forecast;
+    public Double getMessage() {
+        return message;
     }
 
-    public void setForecast(Forecast forecast) {
-        this.forecast = forecast;
+    public void setMessage(Double message) {
+        this.message = message;
+    }
+
+    public Integer getCnt() {
+        return cnt;
+    }
+
+    public void setCnt(Integer cnt) {
+        this.cnt = cnt;
+    }
+
+    public List<DailyForecast> getDailyForecasts() {
+        return dailyForecasts;
+    }
+
+    public void setDailyForecasts(List<DailyForecast> dailyForecasts) {
+        this.dailyForecasts = dailyForecasts;
     }
 }
-

@@ -21,7 +21,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         //----- BuildConfig константа
-        buildConfigField "String", "WEATHER_API_KEY", "\"d0b4522493b145db855192918251105\""
+        buildConfigField "String", "WEATHER_API_KEY", "\"b8194df74a1b4c7c024cbcc539ed3857\""
     }
 
     buildTypes {
