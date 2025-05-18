@@ -15,7 +15,6 @@ public class UviViewModel extends ViewModel {
 
     private ForecastRepository forecastRepository;
 
-    @SuppressWarnings("unchecked")
     @Inject
     public UviViewModel(ForecastRepository forecastRepository) {
         this.forecastRepository = forecastRepository;

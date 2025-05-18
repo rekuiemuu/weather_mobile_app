@@ -27,8 +27,6 @@ public class WeeklyFragment extends Fragment implements ItemClickListener {
 
     private FragmentWeeklyBinding binding;
 
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
 
     private ForecastViewModel forecastViewModel;
     private WeeklyAdapter adapter;
@@ -75,7 +73,7 @@ public class WeeklyFragment extends Fragment implements ItemClickListener {
 
         binding.city.setText(Utility.toTitleCase(city));
 
-        forecastViewModel = new ViewModelProvider(this, viewModelFactory)
+        forecastViewModel = new ViewModelProvider(this)
                 .get(ForecastViewModel.class);
         forecastViewModel.fetchResults(city, numDays)
                 .observe(getViewLifecycleOwner(), result -> {

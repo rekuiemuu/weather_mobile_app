@@ -27,9 +27,6 @@ public class TodayFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
-
     private ForecastViewModel forecastViewModel;
     private UviViewModel uviViewModel;
 
@@ -63,8 +60,9 @@ public class TodayFragment extends Fragment {
 
         binding.city.setText(Utility.toTitleCase(city));
 
-        forecastViewModel = new ViewModelProvider(this, viewModelFactory)
+        forecastViewModel = new ViewModelProvider(this)
                 .get(ForecastViewModel.class);
+
 
         forecastViewModel.fetchResults(city, numDays)
                 .observe(getViewLifecycleOwner(), result -> {
@@ -128,7 +126,7 @@ public class TodayFragment extends Fragment {
     }
 
     private void fetchUvi(double lat, double lon) {
-        uviViewModel = new ViewModelProvider(this, viewModelFactory)
+        uviViewModel = new ViewModelProvider(this)
                 .get(UviViewModel.class);
 
         uviViewModel.fetchUvi(lat, lon)
@@ -139,4 +137,5 @@ public class TodayFragment extends Fragment {
                     }
                 });
     }
+
 }
