@@ -2,13 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_weather"
-        android:icon="@drawable/ic_weather"
-        android:title="Погода" />
+        android:id="@+id/navigation_today"
+        android:icon="@drawable/ic_today_black_24dp"
+        android:title="@string/title_today" />
 
     <item
-        android:id="@+id/nav_history"
-        android:icon="@drawable/ic_history"
-        android:title="История" />
+        android:id="@+id/navigation_weekly"
+        android:icon="@drawable/ic_date_range_black_24dp"
+        android:title="@string/title_weekly" />
+
+    <item
+        android:id="@+id/navigation_share"
+        android:icon="@drawable/ic_share_black_24dp"
+        android:title="@string/title_share" />
 
 </menu>

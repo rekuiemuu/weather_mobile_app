@@ -1,130 +1,95 @@
 package com.example.weather_app;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
-import android.util.Log;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
+import android.view.Menu;
+import android.view.MenuItem;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.example.weather_app.databinding.ActivityMainBinding;
-import com.example.weather_app.ui.HistoryFragment;
-import com.example.weather_app.ui.model.WeatherFragment;
-import com.example.weather_app.util.PermissionUtils;
-import com.example.weather_app.util.Toaster;
+import com.example.weather_app.ui.NavigationController;
+import com.example.weather_app.util.SharedPreferences;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
-import java.util.Locale;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
-    private final int REQUEST_CODE_MIC_INPUT = 101;
-
-    private final ActivityResultLauncher<String[]> permissionLauncher =
-            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
-                boolean granted = Boolean.TRUE.equals(result.get(Manifest.permission.ACCESS_FINE_LOCATION)) ||
-                        Boolean.TRUE.equals(result.get(Manifest.permission.ACCESS_COARSE_LOCATION));
-                if (granted) {
-                    showWeatherFragment();
-                } else {
-                    Toaster.errorToast(this, "Разрешение на локацию отклонено");
-                    finish();
-                }
-            });
+    private AppBarConfiguration appBarConfiguration;
+    DrawerLayout drawer;
+    private NavigationController navigationController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_main);
 
-        if (PermissionUtils.hasLocationPermissions(this)) {
-            showWeatherFragment();
-        } else {
-            permissionLauncher.launch(new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-            });
-        }
+        navigationController = new NavigationController(this);
 
-        initListeners();
-    }
+        BottomNavigationView navView = findViewById(R.id.nav_view);
+        DrawerLayout drawer = findViewById(R.id.drawerLayout);
+        NavigationView navigationView = findViewById(R.id.navView);
 
-    private void initListeners() {
-        binding.bottomNav.setOnItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.nav_weather) {
-                showWeatherFragment();
-                return true;
-            } else if (id == R.id.nav_history) {
-                showHistoryFragment();
-                return true;
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+
+        appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_today,
+                R.id.navigation_weekly,
+                R.id.navigation_share,
+                R.id.settings,
+                R.id.about
+        ).setOpenableLayout(drawer).build();
+
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
+        NavigationUI.setupWithNavController(navigationView, navController);
+
+        // Пример для share
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            if (destination.getId() == R.id.navigation_share) {
+                String temp = SharedPreferences.getInstance(this).getTemp();
+                String desc = SharedPreferences.getInstance(this).getDesc();
+
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT,
+                        "Today's weather is " + desc + " with temperature: " + temp);
+                sendIntent.setType("text/plain");
+
+                if (sendIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(sendIntent);
+                }
             }
-            return false;
         });
     }
 
-    private void showWeatherFragment() {
-        replaceFragment(new WeatherFragment());
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
 
-    private void showHistoryFragment() {
-        replaceFragment(new HistoryFragment());
-    }
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container_view, fragment);
-        transaction.commit();
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (!PermissionUtils.hasInternet(this)) {
-            Toaster.errorToast(this, "Проверьте подключение к интернету");
-        }
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
-    public void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-    }
-
-    public void startVoiceSearch() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Назовите город");
-        try {
-            startActivityForResult(intent, REQUEST_CODE_MIC_INPUT);
-        } catch (Exception e) {
-            Log.e("VoiceSearch", "Ошибка микрофона", e);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_MIC_INPUT && resultCode == RESULT_OK && data != null) {
-            ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-            if (results != null && !results.isEmpty()) {
-                String city = results.get(0).toUpperCase();
-                Fragment current = getSupportFragmentManager().findFragmentById(R.id.fragment_container_view);
-                if (current instanceof WeatherFragment) {
-                    ((WeatherFragment) current).searchCity(city);
-                }
-            }
-        }
-    }
 }
