@@ -4,16 +4,18 @@ import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-
 import com.example.weather_app.model.Resource;
 import com.example.weather_app.model.UviDb;
 import com.example.weather_app.repository.ForecastRepository;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.lifecycle.HiltViewModel;
+
+@HiltViewModel
 public class UviViewModel extends ViewModel {
 
-    private ForecastRepository forecastRepository;
+    private final ForecastRepository forecastRepository;
 
     @Inject
     public UviViewModel(ForecastRepository forecastRepository) {
