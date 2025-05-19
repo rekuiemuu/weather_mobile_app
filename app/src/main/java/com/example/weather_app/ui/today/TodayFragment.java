@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.weather_app.R;
 import com.example.weather_app.databinding.FragmentHomeBinding;
 import com.example.weather_app.model.SavedDailyForecast;
-import com.example.weather_app.model.UviDb;
+import com.example.weather_app.db.UviDb;
 import com.example.weather_app.util.SharedPreferences;
 import com.example.weather_app.util.Utility;
 import com.example.weather_app.viewmodel.ForecastViewModel;
@@ -20,7 +20,6 @@ import com.example.weather_app.viewmodel.UviViewModel;
 import dagger.hilt.android.AndroidEntryPoint;
 import java.util.Calendar;
 import java.util.List;
-import javax.inject.Inject;
 
 @AndroidEntryPoint
 public class TodayFragment extends Fragment {

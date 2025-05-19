@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.weather_app.model.Resource;
 import com.example.weather_app.model.SavedDailyForecast;
-import com.example.weather_app.model.UviDb;
+import com.example.weather_app.db.UviDb;
 import com.example.weather_app.repository.ForecastRepository;
 
 import java.util.List;

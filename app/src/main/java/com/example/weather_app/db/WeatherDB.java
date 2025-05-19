@@ -5,7 +5,6 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
 import com.example.weather_app.model.SavedDailyForecast;
-import com.example.weather_app.model.UviDb;
 
 
 @Database(entities = {SavedDailyForecast.class, UviDb.class},

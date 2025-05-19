@@ -8,7 +8,6 @@ import androidx.room.Query;
 
 
 import com.example.weather_app.model.SavedDailyForecast;
-import com.example.weather_app.model.UviDb;
 
 import java.util.List;
 

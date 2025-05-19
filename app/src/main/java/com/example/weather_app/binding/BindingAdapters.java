@@ -11,8 +11,8 @@ import com.example.weather_app.R;
 public class BindingAdapters {
 
     /**
-     * Управляет видимостью View.
-     * Если значение true — показывает, иначе скрывает.
+     * видимость View.
+     * если значение true — показывает
      */
     @BindingAdapter("visibleGone")
     public static void showHide(View view, boolean show) {
@@ -20,8 +20,8 @@ public class BindingAdapters {
     }
 
     /**
-     * Загружает изображение из URL с помощью Glide.
-     * Использует placeholder и центрирование.
+     * загрузка по глид.
+     * placeholder и центрирование.
      */
     @BindingAdapter("imageUrl")
     public static void setImageUrl(ImageView imageView, String url) {

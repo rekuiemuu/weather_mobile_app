@@ -12,9 +12,9 @@ import com.example.weather_app.db.ForecastDao;
 import com.example.weather_app.model.Resource;
 import com.example.weather_app.model.SavedDailyForecast;
 // import com.example.weather_app.model.Uvi;
-// import com.example.weather_app.model.UviDb;
+// import com.example.weather_app.db.UviDb;
 import com.example.weather_app.model.Uvi;
-import com.example.weather_app.model.UviDb;
+import com.example.weather_app.db.UviDb;
 import com.example.weather_app.model.WeatherForecast;
 import com.example.weather_app.util.Constants;
 

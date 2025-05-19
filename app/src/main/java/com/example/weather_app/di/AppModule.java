@@ -21,7 +21,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-@Module  // убрали includes = ViewModelModule.class
+@Module
 @InstallIn(SingletonComponent.class)
 public final class AppModule {
 

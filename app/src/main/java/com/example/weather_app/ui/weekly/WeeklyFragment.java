@@ -118,6 +118,6 @@ public class WeeklyFragment extends Fragment implements ItemClickListener {
 
     @Override
     public void onItemClickListener(int position) {
-        // TODO: здесь обработка клика по элементу списка (например, переход на детальную страницу)
+        // TODO: оработка клика по элементу списка
     }
 }
