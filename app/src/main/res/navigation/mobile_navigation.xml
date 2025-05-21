@@ -32,4 +32,26 @@
         android:name="com.example.weather_app.ui.settings.AboutFragment"
         android:label="@string/about" />
 
+    <!-- Новые фрагменты для аутентификации -->
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.weather_app.auth.ProfileFragment"
+        android:label="Профиль" />
+
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.weather_app.auth.LoginFragment"
+        android:label="Login">
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.weather_app.auth.RegisterFragment"
+        android:label="Register" />
+
 </navigation>

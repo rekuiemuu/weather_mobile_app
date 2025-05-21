@@ -3,8 +3,11 @@ package com.example.weather_app;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +28,9 @@ import com.example.weather_app.util.SharedPreferences;
 import com.example.weather_app.viewmodel.ForecastViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import static com.example.weather_app.model.Status.ERROR;
 import static com.example.weather_app.model.Status.LOADING;
 import static com.example.weather_app.model.Status.SUCCESS;
@@ -37,26 +43,59 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class MainActivity extends AppCompatActivity {
     private ForecastViewModel viewModel;
     private AppBarConfiguration appBarConfiguration;
-    DrawerLayout drawer;
-    private NavigationController navigationController;
+    private TextView navLoginTv, navEmailTv;
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 1) Инициализируем ViewModel
-        viewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
+        drawer = findViewById(R.id.drawerLayout);
 
-        // 2) Настраиваем NavController + AppBarConfiguration
-        DrawerLayout drawer = findViewById(R.id.drawerLayout);
-        NavigationView drawerNav = findViewById(R.id.navView);
-        BottomNavigationView bottomNav = findViewById(R.id.nav_view);
-
+        // 1) Получаем NavController сразу (будет нужен и ниже)
         NavController navController =
                 Navigation.findNavController(this, R.id.nav_host_fragment);
 
-        // Сохраняем в поле, а не только в локальную переменную
+        // 2) Инициализируем шапку бокового меню и её поля
+        DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+        NavigationView navigationView = findViewById(R.id.navView);
+        View header = navigationView.getHeaderView(0);
+        navLoginTv = header.findViewById(R.id.login_acc);
+        navEmailTv = header.findViewById(R.id.email_acc);
+
+        // 3) Проверяем, залогинен ли пользователь, и заполняем шапку
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String name = user.getDisplayName();
+            if (TextUtils.isEmpty(name) && user.getEmail() != null) {
+                name = user.getEmail().split("@")[0];
+            }
+            navLoginTv.setText(name != null ? name : "—");
+            navEmailTv.setText(user.getEmail());
+        } else {
+            navLoginTv.setText("Гость");
+            navEmailTv.setText("");
+        }
+
+        // 4) Клик на header — если не залогинен, переходим на Login, иначе — на Profile
+        header.setOnClickListener(v -> {
+            FirebaseUser u = FirebaseAuth.getInstance().getCurrentUser();
+            if (u == null) {
+                navController.navigate(R.id.loginFragment);
+            } else {
+                navController.navigate(R.id.profileFragment);
+            }
+            drawerLayout.closeDrawer(GravityCompat.START);
+        });
+
+        // 5) Инициализируем ViewModel
+        viewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
+
+        // 6) Настраиваем BottomNavigationView и привязываем его к NavController
+        BottomNavigationView bottomNav = findViewById(R.id.nav_view);
+
+        // 7) Настраиваем AppBarConfiguration, указываем, какие фрагменты — корневые
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_today,
                 R.id.navigation_weekly,
@@ -64,32 +103,30 @@ public class MainActivity extends AppCompatActivity {
                 R.id.settings,
                 R.id.about
         )
-                .setOpenableLayout(drawer)
+                .setOpenableLayout(drawerLayout)
                 .build();
 
-        // Привязываем тулбар/бургер…
+        // 8) Привязываем ActionBar, NavigationView и BottomNavigationView к NavController
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        // …и боковое меню
-        NavigationUI.setupWithNavController(drawerNav, navController);
-        // …и нижнюю навигацию
+        NavigationUI.setupWithNavController(navigationView, navController);
         NavigationUI.setupWithNavController(bottomNav, navController);
 
-        // Обработка "Share" сразу после навигации
+        // 9) Обрабатываем пункт «Share» при смене вкладки
         navController.addOnDestinationChangedListener((controller, destination, args) -> {
             if (destination.getId() == R.id.navigation_share) {
                 String temp = SharedPreferences.getInstance(this).getTemp();
                 String desc = SharedPreferences.getInstance(this).getDesc();
-                Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT,
-                        "Today's weather is " + desc + " with temperature: " + temp);
-                sendIntent.setType("text/plain");
+                Intent sendIntent = new Intent(Intent.ACTION_SEND)
+                        .putExtra(Intent.EXTRA_TEXT,
+                                "Today's weather is " + desc +
+                                        " with temperature: " + temp)
+                        .setType("text/plain");
                 if (sendIntent.resolveActivity(getPackageManager()) != null) {
                     startActivity(sendIntent);
                 }
             }
         });
     }
-
 
 
     // Теперь appBarConfiguration не null:
@@ -147,4 +184,22 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onAuthSuccess(FirebaseUser user) {
+        if (user == null) return;
+
+        // Обновляем header
+        String displayName = user.getDisplayName();
+        if (TextUtils.isEmpty(displayName) && user.getEmail() != null) {
+            displayName = user.getEmail().split("@")[0];
+        }
+        navLoginTv.setText(displayName);
+        navEmailTv.setText(user.getEmail());
+
+        // Переходим на Today-фрагмент
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController.navigate(R.id.navigation_today);
+
+        // Закрываем drawer
+        drawer.closeDrawer(GravityCompat.START);
+    }
 }
