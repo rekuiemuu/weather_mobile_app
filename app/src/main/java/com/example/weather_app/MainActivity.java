@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
 
         // 6) Настраиваем BottomNavigationView и привязываем его к NavController
-        BottomNavigationView bottomNav = findViewById(R.id.nav_view);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
 
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(navController.getGraph())

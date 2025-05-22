@@ -4,7 +4,7 @@
     android:id="@+id/nav_header_root"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
-    android:background="@drawable/weather_forecast"
+    android:background="@drawable/weather_forecast_smal2l"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -28,11 +28,13 @@
         android:id="@+id/login_acc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/text_color"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:text="здесь должен быть логин"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
+        android:textColor="@color/text_color"
         android:id="@+id/email_acc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
