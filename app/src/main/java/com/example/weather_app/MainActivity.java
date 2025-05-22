@@ -1,7 +1,6 @@
 package com.example.weather_app;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
@@ -13,29 +12,23 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.weather_app.databinding.ActivityMainBinding;
-import com.example.weather_app.ui.NavigationController;
 import com.example.weather_app.util.SharedPreferences;
 import com.example.weather_app.viewmodel.ForecastViewModel;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import static com.example.weather_app.model.Status.ERROR;
-import static com.example.weather_app.model.Status.LOADING;
-import static com.example.weather_app.model.Status.SUCCESS;
-
-import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -44,21 +37,24 @@ public class MainActivity extends AppCompatActivity {
     private ForecastViewModel viewModel;
     private AppBarConfiguration appBarConfiguration;
     private TextView navLoginTv, navEmailTv;
-    private DrawerLayout drawer;
+    private DrawerLayout drawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        drawer = findViewById(R.id.drawerLayout);
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        // 1) Получаем NavController сразу (будет нужен и ниже)
-        NavController navController =
-                Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavHostFragment navHost =
+                (NavHostFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.nav_host_fragment);
+        NavController navController = navHost.getNavController();
+
 
         // 2) Инициализируем шапку бокового меню и её поля
-        DrawerLayout drawerLayout = findViewById(R.id.drawerLayout);
+        drawerLayout = findViewById(R.id.drawerLayout);
         NavigationView navigationView = findViewById(R.id.navView);
         View header = navigationView.getHeaderView(0);
         navLoginTv = header.findViewById(R.id.login_acc);
@@ -89,26 +85,33 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
         });
 
+
         // 5) Инициализируем ViewModel
         viewModel = new ViewModelProvider(this).get(ForecastViewModel.class);
 
         // 6) Настраиваем BottomNavigationView и привязываем его к NavController
         BottomNavigationView bottomNav = findViewById(R.id.nav_view);
 
-        // 7) Настраиваем AppBarConfiguration, указываем, какие фрагменты — корневые
-        appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_today,
-                R.id.navigation_weekly,
-                R.id.navigation_share,
-                R.id.settings,
-                R.id.about
-        )
-                .setOpenableLayout(drawerLayout)
-                .build();
+        AppBarConfiguration appBarConfiguration =
+                new AppBarConfiguration.Builder(navController.getGraph())
+                        .setOpenableLayout(drawerLayout)
+                        .build();
+
+//        // 7) Настраиваем AppBarConfiguration, указываем, какие фрагменты — корневые
+//        appBarConfiguration = new AppBarConfiguration.Builder(
+//                R.id.navigation_today,
+//                R.id.navigation_weekly,
+//                R.id.navigation_share,
+//                R.id.settings,
+//                R.id.about
+//        )
+//                .setOpenableLayout(drawerLayout)
+//                .build();
+
 
         // 8) Привязываем ActionBar, NavigationView и BottomNavigationView к NavController
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        NavigationUI.setupWithNavController(toolbar, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController((NavigationView) findViewById(R.id.navView), navController);
         NavigationUI.setupWithNavController(bottomNav, navController);
 
         // 9) Обрабатываем пункт «Share» при смене вкладки
@@ -200,6 +203,6 @@ public class MainActivity extends AppCompatActivity {
         navController.navigate(R.id.navigation_today);
 
         // Закрываем drawer
-        drawer.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
     }
 }
