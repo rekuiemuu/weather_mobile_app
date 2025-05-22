@@ -1,25 +1,55 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
-google-services.json
-# Local configuration
-local.properties
-*.keystore
-*.jks
+# ===============================
+# Android + Firebase .gitignore
+# ===============================
 
-# Gradle
+# === Local secrets ===
+local.properties
+*.jks
+*.keystore
+*.pem
+
+# Firebase
+app/google-services.json
+app/firebase-debug.log
+firebase-debug.log
+
+# Crashlytics / Fabric
+app/fabric.properties
+
+# === IDE (IntelliJ / Android Studio) ===
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# === Gradle ===
 .gradle/
 build/
+*/build/
 
+# === Log & OS files ===
+*.log
+*.tmp
+*.swp
+.DS_Store
+Thumbs.db
+
+# === APK / AAB / generated ===
+*.apk
+*.ap_
+*.aab
+captures/
+
+# === Test Results ===
+test-results/
+androidTest-results/
+
+# === Local config ===
+.env
+.vscode/
+*.code-workspace
+
+# === Misc ===
+.cxx/
+.externalNativeBuild/
+.cache/
