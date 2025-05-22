@@ -19,8 +19,8 @@
             android:layout_height="553dp"
             android:background="@drawable/weather_forecast"
             android:padding="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <!-- Город (по центру сверху) -->
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 tools:text="Stockholm" />
@@ -42,45 +42,43 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/city"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:textSize="14sp"
                 tools:text="Sunday, Aug 28th" />
 
-            <!-- Иконка погоды (правый нижний угол) -->
-            <ImageView
-                android:id="@+id/weather_resource"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:contentDescription="weather_icon"
-                android:src="@drawable/art_light_rain" />
-
-            <!-- Температура (левый нижний угол) -->
-            <TextView
-                android:id="@+id/temp_condition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:textColor="@color/white"
-                android:textSize="70sp"
-                android:textStyle="bold"
-                tools:text="72°" />
-
-            <!-- Описание погодного состояния (над иконкой) -->
+            <!-- Описание погодного состояния (над температурой) -->
             <TextView
                 android:id="@+id/condition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/weather_resource"
-                android:layout_alignEnd="@id/weather_resource"
-                android:layout_marginEnd="8dp"
-                android:layout_marginBottom="0dp"
-                android:textColor="@color/white"
+                android:layout_below="@id/date"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/text_color"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="Sunny" />
+
+            <!-- Температура (по центру) -->
+            <TextView
+                android:id="@+id/temp_condition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/condition"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/text_color"
+                android:textSize="70sp"
+                tools:text="72°" />
+            <ImageView
+                android:id="@+id/weather_resource"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:layout_below="@id/temp_condition"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:contentDescription="weather_icon"
+                android:src="@drawable/art_light_rain" />
 
         </RelativeLayout>
 
@@ -91,18 +89,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/relative"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/relative"
+            app:layout_constraintVertical_bias="1.0">
 
             <!-- Первая строка -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:layout_marginTop="8dp">
+                android:orientation="horizontal">
 
                 <!-- Блок "Ощущается как" -->
                 <RelativeLayout
@@ -121,8 +121,8 @@
                         android:id="@+id/feels_like"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/thermometer"
                         android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/thermometer"
                         android:text="@string/feels_like"
                         android:textSize="14sp" />
 
@@ -132,8 +132,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/feels_like"
                         android:layout_alignStart="@id/feels_like"
-                        android:textStyle="bold"
                         android:textSize="14sp"
+                        android:textStyle="bold"
                         tools:text="22°" />
 
                 </RelativeLayout>
@@ -155,8 +155,8 @@
                         android:id="@+id/humidity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/humidity_img"
                         android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/humidity_img"
                         android:text="@string/humidity"
                         android:textSize="14sp" />
 
@@ -166,8 +166,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/humidity"
                         android:layout_alignStart="@id/humidity"
-                        android:textStyle="bold"
                         android:textSize="14sp"
+                        android:textStyle="bold"
                         tools:text="62%" />
 
                 </RelativeLayout>
@@ -177,9 +177,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:layout_marginTop="8dp">
+                android:orientation="horizontal">
 
                 <!-- Блок "Ветер" -->
                 <RelativeLayout
@@ -192,14 +192,16 @@
                         android:id="@+id/wind_img"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="-9sp"
                         android:src="@drawable/wind" />
 
                     <TextView
                         android:id="@+id/wind"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/wind_img"
                         android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/wind_img"
                         android:text="@string/wind"
                         android:textSize="14sp" />
 
@@ -209,8 +211,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/wind"
                         android:layout_alignStart="@id/wind"
-                        android:textStyle="bold"
                         android:textSize="14sp"
+                        android:textStyle="bold"
                         tools:text="5 m/s" />
 
                 </RelativeLayout>
@@ -232,8 +234,8 @@
                         android:id="@+id/sun_txt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/sun"
                         android:layout_marginStart="8dp"
+                        android:layout_toEndOf="@id/sun"
                         android:text="@string/uv_index"
                         android:textSize="14sp" />
 
@@ -243,8 +245,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/sun_txt"
                         android:layout_alignStart="@id/sun_txt"
-                        android:textStyle="bold"
                         android:textSize="14sp"
+                        android:textStyle="bold"
                         tools:text="3" />
                 </RelativeLayout>
             </LinearLayout>

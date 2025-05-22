@@ -12,13 +12,14 @@
             android:id="@+id/relative"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:background="@color/weekly_background">
+            android:background="@drawable/weather_forecast_small"
+            >
             <TextView
                 android:id="@+id/city"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="New Delhi"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:textSize="24sp" />
@@ -28,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Friday, June 30"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:layout_below="@+id/city"
                 android:layout_marginStart="16dp"
                 android:textSize="16sp" />
@@ -38,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Light Rain"
-                android:textColor="@color/white"
+                android:textColor="@color/text_color"
                 android:layout_below="@+id/date"
                 android:layout_marginStart="16dp"
                 android:textStyle="bold"
@@ -47,21 +48,23 @@
 
             <ImageView
                 android:id="@+id/weather_resource"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/art_light_rain"
+                android:layout_width="182dp"
+                android:layout_height="163dp"
                 android:layout_alignParentEnd="true"
-                android:padding="8dp"/>
+                android:layout_marginEnd="-3dp"
+                android:padding="8dp"
+                android:src="@drawable/art_light_rain" />
 
             <TextView
                 android:id="@+id/temp_condition"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="36C"
                 android:layout_alignParentBottom="true"
-                android:textColor="@color/white"
+                android:layout_marginBottom="-1dp"
                 android:padding="16dp"
-                android:textSize="48sp" />
+                android:textColor="@color/text_color"
+                android:textSize="48sp"
+                tools:text="36C" />
 
         </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView

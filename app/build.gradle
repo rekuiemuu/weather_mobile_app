@@ -45,6 +45,10 @@ android {
 }
 
 dependencies {
+
+
+    implementation(libs.material)
+
     /* Hilt */
     implementation "com.google.dagger:hilt-android:2.50"
     implementation libs.firebase.auth
