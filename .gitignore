@@ -14,3 +14,12 @@
 .cxx
 local.properties
 google-services.json
+# Local configuration
+local.properties
+*.keystore
+*.jks
+
+# Gradle
+.gradle/
+build/
+
