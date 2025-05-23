@@ -54,4 +54,6 @@ androidTest-results/
 .externalNativeBuild/
 .cache/
 *.properties
+project.properties
+*.properties
 gradle.properties
