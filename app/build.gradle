@@ -4,22 +4,33 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+def localPropsFile = rootProject.file("local.properties")
+if (!localPropsFile.exists()) {
+    throw new GradleException("Не найден local.properties! Положите туда weatherApiKey=ВАШ_КЛЮЧ")
+}
+def localProps = new Properties()
+localProps.load(new FileInputStream(localPropsFile))
+
+def WEATHER_API_KEY = localProps.getProperty("weatherApiKey") ?: ""
+if (WEATHER_API_KEY.isEmpty()) {
+    throw new GradleException("В local.properties не задано weatherApiKey")
+}
+// ---
+
 android {
     namespace 'com.example.weather_app'
     compileSdk 35
-
-    /** читаем ключ из local.properties: weatherApiKey=YOUR_KEY */
-    def WEATHER_API_KEY = project.properties['weatherApiKey'] ?: ""
-
     defaultConfig {
         applicationId "com.example.weather_app"
         minSdk 33
         targetSdk 35
         versionCode 1
         versionName "1.0"
-        buildConfigField "String", "WEATHER_API_KEY", "\"${WEATHER_API_KEY}\""
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        // вот тут подставляется ваш ключ
+        buildConfigField "String", "WEATHER_API_KEY", "\"${WEATHER_API_KEY}\""
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
