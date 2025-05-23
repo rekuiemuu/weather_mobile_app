@@ -65,6 +65,11 @@ public class WeeklyFragment extends Fragment implements ItemClickListener {
         super.onDestroyView();
         binding = null;
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchData();
+    }
 
     private void fetchData() {
         int hourOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);

@@ -149,10 +149,16 @@ public class MainActivity extends AppCompatActivity {
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint("Введите город");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override public boolean onQueryTextSubmit(String query) {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
                 if (query == null || query.trim().isEmpty()) return false;
-                // Используем инициализированный viewModel:
-                viewModel.fetchResults(query.trim(), "7")
+                // 1) сохраняем новый город
+                SharedPreferences prefs = SharedPreferences.getInstance(MainActivity.this);
+                prefs.putStringValue(SharedPreferences.CITY, query.trim());
+                // 2) берём из настроек количество дней
+                String days = prefs.getNumDays();
+                // 3) обновляем модель
+                viewModel.fetchResults(query.trim(), days)
                         .observe(MainActivity.this, resource -> {
                             switch (resource.status) {
                                 case SUCCESS:
@@ -161,17 +167,25 @@ public class MainActivity extends AppCompatActivity {
                                     break;
                                 case ERROR:
                                     Toast.makeText(MainActivity.this,
-                                            "Ошибка загрузки прогноза", Toast.LENGTH_SHORT).show();
+                                            resource.message, Toast.LENGTH_SHORT).show();
                                     break;
                             }
                         });
                 searchView.clearFocus();
+                // 4) показываем Today-фрагмент сразу
+                NavController nav = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment);
+                nav.navigate(R.id.navigation_today);
                 return true;
             }
-            @Override public boolean onQueryTextChange(String newText) { return false; }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
         });
         return true;
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawerLayout);

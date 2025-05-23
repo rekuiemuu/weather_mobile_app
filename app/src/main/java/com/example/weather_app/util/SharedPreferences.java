@@ -60,7 +60,7 @@ public class SharedPreferences {
     // Getters
     //----------------------------------------------------------------------------------------------
     public String getCity() {
-        return preferences.getString(CITY, "Moscow");
+        return preferences.getString(CITY, "Almaty");
     }
 
     public String getNumDays() {
