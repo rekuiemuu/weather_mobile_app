@@ -9,12 +9,17 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import android.os.Handler;
+import android.os.Looper;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import com.example.weather_app.MainActivity;
+import com.example.weather_app.R;
 import com.example.weather_app.databinding.SettingsFragmentBinding;
 import com.example.weather_app.ui.NavigationController;
 import com.example.weather_app.util.AutoClearedValue;
 import com.example.weather_app.util.SharedPreferences;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class SettingsFragment extends DialogFragment {
 
@@ -47,21 +52,36 @@ public class SettingsFragment extends DialogFragment {
         binding.get().setCity(prefs.getCity());
         binding.get().setNumDays(prefs.getNumDays());
         binding.get().executePendingBindings();
+
+
+        binding.get().btnSettingsOk.setOnClickListener(v -> didTapOk());
+        binding.get().btnSettingsCancel.setOnClickListener(v -> didTapCancel());
+
+
     }
 
-    public void didTapCancel(View v) {
-        dismiss();
-    }
-
-    public void didTapOk(View v) {
+    public void didTapOk() {
         SharedPreferences prefs = SharedPreferences.getInstance(requireContext());
 
-        prefs.putStringValue(SharedPreferences.CITY,
-                binding.get().etSettingsCity.getText().toString());
-        prefs.putStringValue(SharedPreferences.NUM_DAYS,
-                binding.get().etSettingsNumDays.getText().toString());
+        String city = binding.get().etSettingsCity.getText().toString().trim();
+        String days = binding.get().etSettingsNumDays.getText().toString().trim();
 
-        startActivity(new Intent(requireContext(), MainActivity.class));
+        prefs.putStringValue(SharedPreferences.CITY, city);
+        prefs.putStringValue(SharedPreferences.NUM_DAYS, days);
+
+        dismiss();
+
+        new Handler(Looper.getMainLooper()).post(() -> {
+            BottomNavigationView bottomNav = requireActivity().findViewById(R.id.bottom_nav);
+            bottomNav.setSelectedItemId(R.id.navigation_today);
+        });
+    }
+
+
+
+    public void didTapCancel() {
         dismiss();
     }
+
+
 }

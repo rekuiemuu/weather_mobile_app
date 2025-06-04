@@ -74,7 +74,8 @@ public class WeeklyFragment extends Fragment implements ItemClickListener {
     private void fetchData() {
         int hourOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         String city    = SharedPreferences.getInstance(requireContext()).getCity();
-        String numDays = SharedPreferences.getInstance(requireContext()).getNumDays();
+        int rawDays = Integer.parseInt(SharedPreferences.getInstance(requireContext()).getNumDays());
+        String numDays = String.valueOf(rawDays + 1); // ⬅ костыль: запрашиваем на 1 больше
 
         binding.city.setText(Utility.toTitleCase(city));
 

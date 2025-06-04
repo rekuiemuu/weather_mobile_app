@@ -79,19 +79,20 @@
             android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:text="@string/settings_cancel_button"
-            android:onClick="@{settingsFragment::didTapCancel}"
+
             app:layout_constraintTop_toBottomOf="@id/et_settings_num_days"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guideline" />
 
         <Button
+
             android:id="@+id/btn_settings_ok"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:layout_marginStart="8dp"
             android:text="@string/settings_ok_button"
-            android:onClick="@{settingsFragment::didTapOk}"
+
             app:layout_constraintTop_toBottomOf="@id/et_settings_num_days"
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintEnd_toEndOf="parent" />

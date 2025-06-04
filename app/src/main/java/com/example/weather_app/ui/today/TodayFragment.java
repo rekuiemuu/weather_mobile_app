@@ -136,5 +136,10 @@ public class TodayFragment extends Fragment {
                     }
                 });
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchData();          // перечитываем обновлённые CITY и NUM_DAYS
+    }
 
 }

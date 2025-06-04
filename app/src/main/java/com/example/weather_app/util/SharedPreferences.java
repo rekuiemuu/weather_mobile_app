@@ -13,8 +13,10 @@ public class SharedPreferences {
     //----------------------------------------------------------------------------------------------
     // String Constants
     //----------------------------------------------------------------------------------------------
+// String Constants
     public static final String CITY = "token";
     public static final String NUM_DAYS = "num_days";
+
     public static final String DESC = "desc";
     public static final String TEMP = "temp";
 
@@ -36,10 +38,16 @@ public class SharedPreferences {
         return instance;
     }
 
+    // util/SharedPreferences.java
     public void putStringValue(String key, String value) {
         editor.putString(key, value);
-        editor.commit();
+        editor.commit();              // записали в XML
+        synchronized (SharedPreferences.class) {
+            instance = null;          // заставит getInstance() перечитать файл
+        }
     }
+
+
 
     public void putIntValue(String key, int value) {
         editor.putInt(key, value);

@@ -45,4 +45,14 @@ public class NavigationController {
         DialogFragment settingsFragment = SettingsFragment.create();
         settingsFragment.show(fragmentManager, tag);
     }
+    public void navigateToToday() {
+        String tag = "today";
+        TodayFragment todayFragment = new TodayFragment();
+        fragmentManager.beginTransaction()
+                .replace(containerId, todayFragment, tag)
+                .addToBackStack(null)
+                .commitAllowingStateLoss();
+    }
+
+
 }

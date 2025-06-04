@@ -25,7 +25,11 @@
     <fragment
         android:id="@+id/settings"
         android:name="com.example.weather_app.ui.settings.SettingsFragment"
-        android:label="@string/settings" />
+        android:label="@string/settings" >
+        <action
+            android:id="@+id/action_settings_to_navigation_today"
+            app:destination="@id/navigation_today" />
+    </fragment>
 
     <fragment
         android:id="@+id/about"
