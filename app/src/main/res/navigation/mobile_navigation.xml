@@ -6,25 +6,25 @@
 
     <fragment
         android:id="@+id/navigation_today"
-        android:name="com.example.weather_app.ui.today.TodayFragment"
+        android:name="com.example.weather_app.presentation.today.TodayFragment"
         android:label=""
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_weekly"
-        android:name="com.example.weather_app.ui.weekly.WeeklyFragment"
+        android:name="com.example.weather_app.presentation.weekly.WeeklyFragment"
         android:label=""
         tools:layout="@layout/fragment_weekly" />
 
     <fragment
         android:id="@+id/navigation_share"
-        android:name="com.example.weather_app.ui.today.TodayFragment"
+        android:name="com.example.weather_app.presentation.today.TodayFragment"
         android:label=""
         tools:layout=""/>
     <!-- Добавьте эти два: -->
     <fragment
         android:id="@+id/settings"
-        android:name="com.example.weather_app.ui.settings.SettingsFragment"
+        android:name="com.example.weather_app.presentation.settings.SettingsFragment"
         android:label="@string/settings" >
         <action
             android:id="@+id/action_settings_to_navigation_today"
@@ -33,20 +33,20 @@
 
     <fragment
         android:id="@+id/about"
-        android:name="com.example.weather_app.ui.settings.AboutFragment"
+        android:name="com.example.weather_app.presentation.settings.AboutFragment"
         android:label="@string/about" />
 
     <!-- Новые фрагменты для аутентификации -->
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.weather_app.auth.ProfileFragment"
+        android:name="com.example.weather_app.data.auth.ProfileFragment"
         android:label="Профиль" />
 
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.weather_app.auth.LoginFragment"
+        android:name="com.example.weather_app.data.auth.LoginFragment"
         android:label="Login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
@@ -55,7 +55,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.weather_app.auth.RegisterFragment"
+        android:name="com.example.weather_app.data.auth.RegisterFragment"
         android:label="Register" />
 
 </navigation>

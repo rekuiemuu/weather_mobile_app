@@ -8,7 +8,7 @@
         <variable name="numDays" type="String" />
         <variable
             name="settingsFragment"
-            type="com.example.weather_app.ui.settings.SettingsFragment" />
+            type="com.example.weather_app.presentation.settings.SettingsFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
