@@ -1,4 +1,4 @@
-package com.example.weather_app.presentation.ui;
+package com.example.weather_app.presentation.main;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;

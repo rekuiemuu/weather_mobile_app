@@ -1,4 +1,4 @@
-package com.example.weather_app.data.binding;
+package com.example.weather_app.data.local.preferences;
 
 import android.content.Context;
 

@@ -14,7 +14,7 @@ import com.example.weather_app.R;
 import com.example.weather_app.databinding.FragmentWeeklyBinding;
 import com.example.weather_app.domain.model.SavedDailyForecast;
 import com.example.weather_app.presentation.weekly.WeeklyAdapter.ItemClickListener;
-import com.example.weather_app.data.binding.SharedPreferences;
+import com.example.weather_app.data.local.preferences.SharedPreferences;
 import com.example.weather_app.presentation.util.Utility;
 import com.example.weather_app.presentation.viewmodel.ForecastViewModel;
 import dagger.hilt.android.AndroidEntryPoint;

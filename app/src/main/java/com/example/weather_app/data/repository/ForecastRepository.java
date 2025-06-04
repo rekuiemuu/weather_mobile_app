@@ -8,13 +8,13 @@ import com.example.weather_app.data.binding.AppExecutors;
 import com.example.weather_app.BuildConfig;
 import com.example.weather_app.data.api.ApiResponse;
 import com.example.weather_app.data.api.WeatherService;
-import com.example.weather_app.data.db.ForecastDao;
+import com.example.weather_app.data.local.db.ForecastDao;
 import com.example.weather_app.domain.model.Resource;
 import com.example.weather_app.domain.model.SavedDailyForecast;
 // import com.example.weather_app.model.Uvi;
 // import com.example.weather_app.db.UviDb;
 import com.example.weather_app.domain.model.Uvi;
-import com.example.weather_app.data.db.UviDb;
+import com.example.weather_app.data.local.db.UviDb;
 import com.example.weather_app.domain.model.WeatherForecast;
 import com.example.weather_app.data.api.Constants;
 

@@ -5,8 +5,8 @@ import androidx.room.Room;
 
 import com.example.weather_app.data.binding.AppExecutors;
 import com.example.weather_app.data.api.WeatherService;
-import com.example.weather_app.data.db.ForecastDao;
-import com.example.weather_app.data.db.WeatherDB;
+import com.example.weather_app.data.local.db.ForecastDao;
+import com.example.weather_app.data.local.db.WeatherDB;
 import com.example.weather_app.data.api.Constants;
 import com.example.weather_app.data.api.LiveDataCallAdapterFactory;
 

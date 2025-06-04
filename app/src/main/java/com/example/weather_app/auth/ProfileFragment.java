@@ -1,4 +1,4 @@
-package com.example.weather_app.data.auth;
+package com.example.weather_app.auth;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

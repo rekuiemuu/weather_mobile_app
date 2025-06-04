@@ -14,9 +14,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import com.example.weather_app.R;
 import com.example.weather_app.databinding.SettingsFragmentBinding;
-import com.example.weather_app.presentation.ui.NavigationController;
+import com.example.weather_app.presentation.main.NavigationController;
 import com.example.weather_app.presentation.util.AutoClearedValue;
-import com.example.weather_app.data.binding.SharedPreferences;
+import com.example.weather_app.data.local.preferences.SharedPreferences;
 
 public class SettingsFragment extends DialogFragment {
 

@@ -40,13 +40,13 @@
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.weather_app.data.auth.ProfileFragment"
+        android:name="com.example.weather_app.auth.ProfileFragment"
         android:label="Профиль" />
 
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.weather_app.data.auth.LoginFragment"
+        android:name="com.example.weather_app.auth.LoginFragment"
         android:label="Login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
@@ -55,7 +55,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.weather_app.data.auth.RegisterFragment"
+        android:name="com.example.weather_app.auth.RegisterFragment"
         android:label="Register" />
 
 </navigation>

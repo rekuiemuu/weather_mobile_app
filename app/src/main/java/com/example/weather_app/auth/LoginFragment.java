@@ -1,4 +1,4 @@
-package com.example.weather_app.data.auth;
+package com.example.weather_app.auth;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.weather_app.presentation.MainActivity;
+import com.example.weather_app.presentation.main.MainActivity;
 import com.example.weather_app.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

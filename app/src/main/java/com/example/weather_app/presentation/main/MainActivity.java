@@ -1,4 +1,4 @@
-package com.example.weather_app.presentation;
+package com.example.weather_app.presentation.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.weather_app.R;
-import com.example.weather_app.data.binding.SharedPreferences;
+import com.example.weather_app.data.local.preferences.SharedPreferences;
 import com.example.weather_app.presentation.viewmodel.ForecastViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;

@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.weather_app.domain.model.Resource;
-import com.example.weather_app.data.db.UviDb;
+import com.example.weather_app.data.local.db.UviDb;
 import com.example.weather_app.data.repository.ForecastRepository;
 
 import javax.inject.Inject;
