@@ -118,10 +118,10 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, args) -> {
             if (destination.getId() == R.id.navigation_share) {
                 String temp = SharedPreferences.getInstance(this).getTemp();
-                String desc = SharedPreferences.getInstance(this).getDesc();
+                String description = SharedPreferences.getInstance(this).getDescription();
                 Intent sendIntent = new Intent(Intent.ACTION_SEND)
                         .putExtra(Intent.EXTRA_TEXT,
-                                "Today's weather is " + desc +
+                                "Today's weather is " + description +
                                         " with temperature: " + temp)
                         .setType("text/plain");
                 if (sendIntent.resolveActivity(getPackageManager()) != null) {

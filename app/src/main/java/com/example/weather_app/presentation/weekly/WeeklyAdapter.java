@@ -51,7 +51,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
         int weather_id = forecast.getWeatherid();
 
         //Set values
-        holder.desc.setText(description);
+        holder.description.setText(description);
         holder.temp.setText(Utility.formatTemperature(mContext, forecast.getMaxTemp()) + "/" + Utility.formatTemperature(mContext, forecast.getMinTemp()));
         int resId = Utility.getIconResourceForWeatherCondition(weather_id);
         if (resId != -1) {
@@ -102,7 +102,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
 
         TextView day;
         TextView temp;
-        TextView desc;
+        TextView description;
         ImageView imageView;
 
         WeeklyViewHolder(View itemView) {
@@ -110,7 +110,7 @@ public class WeeklyAdapter extends RecyclerView.Adapter<WeeklyAdapter.WeeklyView
 
             day = itemView.findViewById(R.id.day);
             temp = itemView.findViewById(R.id.temp);
-            desc = itemView.findViewById(R.id.desc);
+            description = itemView.findViewById(R.id.description);
             imageView = itemView.findViewById(R.id.weather_img);
             itemView.setOnClickListener(this);
         }

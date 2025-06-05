@@ -17,7 +17,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Weather</string>
     <string name="nav_header_subtitle">delaroy4u@gmail.com</string>
-    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_description">Navigation header</string>
     <string name="action_settings">Settings</string>
 
     <!-- Settings -->

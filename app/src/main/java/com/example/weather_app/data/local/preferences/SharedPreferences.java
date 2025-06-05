@@ -1,5 +1,7 @@
 package com.example.weather_app.data.local.preferences;
 
+import static android.provider.MediaStore.Video.VideoColumns.DESCRIPTION;
+
 import android.content.Context;
 
 public class SharedPreferences {
@@ -17,7 +19,7 @@ public class SharedPreferences {
     public static final String CITY = "token";
     public static final String NUM_DAYS = "num_days";
 
-    public static final String DESC = "desc";
+    public static final String DESC = "description";
     public static final String TEMP = "temp";
 
 
@@ -75,8 +77,8 @@ public class SharedPreferences {
         return preferences.getString(NUM_DAYS, "7");
     }
 
-    public String getDesc() {
-        return preferences.getString(DESC, "");
+    public String getDescription() {
+        return preferences.getString(DESCRIPTION, "");
     }
 
     public String getTemp() {

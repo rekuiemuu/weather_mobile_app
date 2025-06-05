@@ -31,7 +31,7 @@
         android:layout_toEndOf="@+id/day" />
 
     <TextView
-        android:id="@+id/desc"
+        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:gravity="center"

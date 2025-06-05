@@ -19,11 +19,11 @@ if (WEATHER_API_KEY.isEmpty()) {
 
 android {
     namespace 'com.example.weather_app'
-    compileSdk 35
+    compileSdk 34
     defaultConfig {
         applicationId "com.example.weather_app"
-        minSdk 33
-        targetSdk 35
+        minSdk 30
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
