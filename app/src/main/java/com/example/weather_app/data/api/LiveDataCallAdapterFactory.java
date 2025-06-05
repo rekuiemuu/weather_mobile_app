@@ -29,3 +29,7 @@ public class LiveDataCallAdapterFactory extends CallAdapter.Factory {
         return new LiveDataCallAdapter<>(bodyType);
     }
 }
+//проверка что метод API возвращает LiveData<ApiResponse<T>>
+//вытаскивает из неё тип T
+//и создаёт LiveDataCallAdapter<T>
+//который берет и превращает Call<T> в LiveData<ApiResponse<T>>

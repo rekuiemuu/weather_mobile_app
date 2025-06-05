@@ -10,14 +10,13 @@ import retrofit2.Call;
 import retrofit2.CallAdapter;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+// в тупую превращает Retrofit Call<R> в LiveData<ApiResponse<R>>
 public class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<ApiResponse<R>>> {
     private final Type responseType;
     public LiveDataCallAdapter(Type responseType) {
         this.responseType = responseType;
     }
 
-    @Override
     public Type responseType() {
         return responseType;
     }
@@ -46,3 +45,5 @@ public class LiveDataCallAdapter<R> implements CallAdapter<R, LiveData<ApiRespon
         };
     }
 }
+// теперь можно в ViewModel написать вот так: LiveData<ApiResponse<WeatherResponse>> = repository.getWeather("Moscow");
+//  потом наблюдать результат как LiveData, без ручного управления enqueue и Callback

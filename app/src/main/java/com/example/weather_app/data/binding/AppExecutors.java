@@ -14,30 +14,22 @@ import javax.inject.Singleton;
 @Singleton
 public class AppExecutors {
 
-    private final Executor diskIO;
-
-    private final Executor networkIO;
-
-    private final Executor mainThread;
+    private final Executor diskIO; // для румы
+    private final Executor mainThread; // мой главный ui поток
 
     public AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread) {
         this.diskIO = diskIO;
-        this.networkIO = networkIO;
         this.mainThread = mainThread;
-    }
+    } // фоновая работа (запрос в руму)
 
     @Inject
     public AppExecutors() {
         this(Executors.newSingleThreadExecutor(), Executors.newFixedThreadPool(3),
                 new MainThreadExecutor());
-    }
+    } // для обновления ui // инкапсуляция и перенаправление
 
     public Executor diskIO() {
         return diskIO;
-    }
-
-    public Executor networkIO() {
-        return networkIO;
     }
 
     public Executor mainThread() {

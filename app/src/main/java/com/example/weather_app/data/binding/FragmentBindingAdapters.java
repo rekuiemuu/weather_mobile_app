@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 
 import javax.inject.Inject;
-
+// если короче: если в хмл увидишь app:imageUrl="...", вызови вот этот метод!!!!
 public class FragmentBindingAdapters {
     final Fragment fragment;
 

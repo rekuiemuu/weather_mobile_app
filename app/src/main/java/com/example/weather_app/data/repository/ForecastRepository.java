@@ -186,7 +186,7 @@ public class ForecastRepository {
 
             @Override
             protected void onFetchFailed() {
-
+                // говорить об ашипке
             }
 
         }.asLiveData();
